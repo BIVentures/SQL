@@ -1,0 +1,323 @@
+## Microsoft SQL Server Scripts Displaying the Following: ##
+## Create Tables ##
+## Insert Values ##
+## Alter / Update ##
+## Change Column Names ##
+
+
+USE MAM
+GO
+
+CREATE TABLE Salesman (
+    salesman_id int,
+    name varchar(255),
+    city  varchar(255),
+    commission DECIMAL(5,2) 
+);
+
+INSERT INTO dbo.Salesman VALUES (5001,'James Hoog','New York', 0.15);  
+GO 
+INSERT INTO dbo.Salesman VALUES (5002,'Nail Knite','Paris', 0.13);  
+GO 
+INSERT INTO dbo.Salesman VALUES (5005,'Pit Alex','London', 0.11);  
+GO 
+INSERT INTO dbo.Salesman VALUES (5006,'Mc Lyon','Paris', 0.14);  
+GO 
+INSERT INTO dbo.Salesman VALUES (5003,'Lauson Hen',' ', 0.12);  
+GO 
+INSERT INTO dbo.Salesman VALUES (5007,'Paul Adam','Rome', 0.13);  
+GO 
+
+salesman_id  name        city        commission
+-----------  ----------  ----------  ----------
+5001         James Hoog  New York    0.15
+5002         Nail Knite  Paris       0.13
+5005         Pit Alex    London      0.11
+5006         Mc Lyon     Paris       0.14
+5003         Lauson Hen              0.12
+5007         Paul Adam   Rome        0.13
+
+ALTER TABLE Salesman
+ALTER COLUMN salesman_id INT NOT NULL;
+GO
+ALTER TABLE Salesman
+ADD PRIMARY KEY (salesman_id); 
+
+
+
+
+USE MAM
+GO
+
+CREATE TABLE Customer (
+    customer_id INT NOT NULL PRIMARY KEY,
+    cust_name varchar(255),
+    city  varchar(255),
+	grade int,
+	salesman_id int,
+    FOREIGN KEY (salesman_id) REFERENCES Salesman(salesman_id)
+);
+
+INSERT INTO dbo.Customer VALUES (3002,' Nick Rimando','New York',100,5001);  
+GO 
+INSERT INTO dbo.Customer VALUES (3005,'Graham Zusi','California',200,5002);  
+GO 
+INSERT INTO dbo.Customer VALUES (3001,'Brad Guzan ','London','',5005);  
+GO 
+INSERT INTO dbo.Customer VALUES (3004,'Fabian Johns','Paris',300,5006);  
+GO 
+INSERT INTO dbo.Customer VALUES (3007,'Brad Davis','New York',200,5001);  
+GO 
+INSERT INTO dbo.Customer VALUES (3009,'Geoff Camero','Berlin',100,5003);  
+GO 
+INSERT INTO dbo.Customer VALUES (3008,'Julian Green','London',300,5002);  
+GO 
+INSERT INTO dbo.Customer VALUES (3003,'Jozy Altidor','Moscow',200,5007);  
+GO 
+
+
+Table: Customer
+
+customer_id  cust_name     city        grade       salesman_id
+-----------  ------------  ----------  ----------  -----------
+3002         Nick Rimando  New York    100         5001
+3005         Graham Zusi   California  200         5002
+3001         Brad Guzan    London                  5005
+3004         Fabian Johns  Paris       300         5006
+3007         Brad Davis    New York    200         5001
+3009         Geoff Camero  Berlin      100         5003
+3008         Julian Green  London      300         5002
+3003         Jozy Altidor  Moscow      200         5007
+
+
+
+USE MAM
+GO
+CREATE TABLE Orders (
+    ord_no INT NOT NULL PRIMARY KEY,
+    purch_amt DECIMAL(5,2),
+    ord_date DATE,
+	customer_id int,
+	salesman_id int,
+	FOREIGN KEY (customer_id) REFERENCES Customer(customer_id),
+    FOREIGN KEY (salesman_id) REFERENCES Salesman(salesman_id)
+);
+
+ALTER TABLE Orders
+ALTER COLUMN purch_amt DECIMAL(10,2);
+
+INSERT INTO dbo.Orders VALUES (70001,150.5,'2012-10-05',3005,5002);  
+GO 
+INSERT INTO dbo.Orders VALUES (70009,270.65,'2012-09-10',3001,5005);   
+GO 
+INSERT INTO dbo.Orders VALUES (70002,65.26,'2012-10-05',3002,5001);    
+GO 
+INSERT INTO dbo.Orders VALUES (70004,110.5,'2012-08-17',3009,5003);   
+GO 
+INSERT INTO dbo.Orders VALUES (70007,948.5,'2012-09-10',3005,5002);    
+GO 
+INSERT INTO dbo.Orders VALUES (70005,2400.6,'2012-07-27',3007,5001);    
+GO 
+INSERT INTO dbo.Orders VALUES (70008,5760,'2012-09-10',3002,5001);    
+GO 
+INSERT INTO dbo.Orders VALUES (70010,1983.43 ,'2012-10-10',3004,5006);   
+GO 
+INSERT INTO dbo.Orders VALUES (70003,2480.4 ,'2012-10-10',3009,5003);   
+GO 
+INSERT INTO dbo.Orders VALUES (70012,250.45,'2012-06-27',3008,5002);
+GO 
+INSERT INTO dbo.Orders VALUES (70011,75.29,'2012-08-17',3003,5007);
+GO 
+INSERT INTO dbo.Orders VALUES (70013,3045.6,'2012-04-25',3002,5001)
+GO 
+ 
+Table: Orders
+
+ord_no      purch_amt   ord_date    customer_id  salesman_id
+----------  ----------  ----------  -----------  -----------
+70001       150.5       2012-10-05  3005         5002
+70009       270.65      2012-09-10  3001         5005
+70002       65.26       2012-10-05  3002         5001
+70004       110.5       2012-08-17  3009         5003
+70007       948.5       2012-09-10  3005         5002
+70005       2400.6      2012-07-27  3007         5001
+70008       5760        2012-09-10  3002         5001
+70010       1983.43     2012-10-10  3004         5006
+70003       2480.4      2012-10-10  3009         5003
+
+
+
+
+USE MAM
+GO
+
+CREATE TABLE Company_mast (
+    com_id INT NOT NULL PRIMARY KEY,
+    com_name varchar(255)
+);
+
+INSERT INTO dbo.Company_mast VALUES (11,'Samsung');  
+GO 
+INSERT INTO dbo.Company_mast VALUES (12, 'iBall');  
+GO 
+INSERT INTO dbo.Company_mast VALUES (13, 'Epsion');  
+GO 
+INSERT INTO dbo.Company_mast VALUES (14, 'Zebronics');  
+GO 
+INSERT INTO dbo.Company_mast VALUES (15, 'Asus');  
+GO 
+INSERT INTO dbo.Company_mast VALUES (16, 'Frontech');  
+GO 
+
+USE MAM
+GO 
+
+EXEC sp_rename 'Company_mast.com_id', 'company_id', 'COLUMN';
+EXEC sp_rename 'Company_mast.com_name', 'company_name', 'COLUMN';
+
+
+Table: Company_mast
+
+com_id com_name
+------ -------------
+    11 Samsung
+    12 iBall
+    13 Epsion
+    14 Zebronics
+    15 Asus
+    16 Frontech
+
+
+
+
+CREATE TABLE Item_mast (
+    product_id INT NOT NULL PRIMARY KEY,
+    product_name varchar(255),
+	product_price DECIMAL (5,0),
+	product_company INT	
+);
+
+INSERT INTO dbo.Item_mast VALUES (101,'Mother Board',3200,15);
+GO
+INSERT INTO dbo.Item_mast VALUES (102,'Key Board',450,16);
+GO
+INSERT INTO dbo.Item_mast VALUES (103,'ZIP drive',250,14);
+GO
+INSERT INTO dbo.Item_mast VALUES (104,'Speaker',550,16);
+GO
+INSERT INTO dbo.Item_mast VALUES (105,'Monitor',5000,11);
+GO
+INSERT INTO dbo.Item_mast VALUES (106,'DVD drive',900,12);
+GO
+INSERT INTO dbo.Item_mast VALUES (107,'CD drive',800,12);
+GO
+INSERT INTO dbo.Item_mast VALUES (108,'Printer',2600,13);
+GO
+INSERT INTO dbo.Item_mast VALUES (109,'Refill cartridge',350,13);
+GO
+INSERT INTO dbo.Item_mast VALUES (110,'Mouse',250,12);
+GO
+Table: Item_mast
+
+product_id  product_name         product_price    product_com
+------- ------------------------- ---------- ----------
+    101 Mother Board                    3200         15
+    102 Key Board                        450         16
+    103 ZIP drive                        250         14
+    104 Speaker                          550         16
+    105 Monitor                         5000         11
+    106 DVD drive                        900         12
+    107 CD drive                         800         12
+    108 Printer                         2600         13
+    109 Refill cartridge                 350         13
+    110 Mouse                            250         12
+
+
+CREATE TABLE Employee_department (
+    department_code INT NOT NULL PRIMARY KEY,
+    department_name varchar(255),
+	department_allotment BIGINT
+);
+
+INSERT INTO dbo.Employee_department VALUES (57,'IT',65000);
+GO
+INSERT INTO dbo.Employee_department VALUES (63 ,'Finance',15000);
+GO
+INSERT INTO dbo.Employee_department VALUES (47,'HR ',240000);
+GO
+INSERT INTO dbo.Employee_department VALUES (27 ,'RD',55000);
+GO
+INSERT INTO dbo.Employee_department VALUES (89 ,'QC',75000);
+GO
+
+
+Table: Employee_department
+
+department_code department_name        department_allotment
+-------- --------------- -------------
+      57 IT                      65000
+      63 Finance                 15000
+      47 HR                     240000
+      27 RD                      55000
+      89 QC                      75000
+
+
+
+
+
+CREATE TABLE Employee_details (
+    employee_id INT NOT NULL PRIMARY KEY,
+    employee_firstname  varchar(255),
+	employee_lastname  varchar(255),
+	Employee_details _code INT
+);
+
+INSERT INTO dbo.Employee_details  VALUES (127323,'Michale','Robbin',57);
+GO
+INSERT INTO dbo.Employee_details  VALUES (526689,'Carlos','Snares',63);
+GO
+INSERT INTO dbo.Employee_details  VALUES (843795,'Enric','Dosio',57);
+GO
+INSERT INTO dbo.Employee_details  VALUES (328717,'John','Snares',63);
+GO
+INSERT INTO dbo.Employee_details  VALUES (444527,'Joseph','Dosni',47);
+GO
+INSERT INTO dbo.Employee_details  VALUES (659831,'Zanifer','Emily',47);
+GO
+INSERT INTO dbo.Employee_details  VALUES (847674,'Kuleswar','Sitaraman',57);
+GO
+INSERT INTO dbo.Employee_details  VALUES (748681,'Henrey','Gabriel',47);
+GO
+INSERT INTO dbo.Employee_details  VALUES (555935,'Alex','Manuel',57);
+GO
+INSERT INTO dbo.Employee_details  VALUES (539569,'George','Mardy',27);
+GO
+INSERT INTO dbo.Employee_details  VALUES (733843,'Mario','Saule',63);
+GO
+INSERT INTO dbo.Employee_details  VALUES (631548,'Alan','Snappy',27);
+GO
+INSERT INTO dbo.Employee_details  VALUES (839139,'Maria','Foster',57);
+GO
+
+Table: Employee_details
+
+employee_id employee_firstname       employee_lastname        employee_department_code
+--------- --------------- --------------- ----------
+   127323 Michale         Robbin                  57
+   526689 Carlos          Snares                  63
+   843795 Enric           Dosio                   57
+   328717 Jhon            Snares                  63
+   444527 Joseph          Dosni                   47
+   659831 Zanifer         Emily                   47
+   847674 Kuleswar        Sitaraman               57
+   748681 Henrey          Gabriel                 47
+   555935 Alex            Manuel                  57
+   539569 George          Mardy                   27
+   733843 Mario           Saule                   63
+   631548 Alan            Snappy                  27
+   839139 Maria           Foster                  57
+
+
+
+
+
