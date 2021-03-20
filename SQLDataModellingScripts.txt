@@ -1,0 +1,82 @@
+1. Prepare a list with salesman name, customer name and their cities for the salesmen and customer who belongs to the same city
+
+USE MAM
+GO
+
+SELECT SalesmanT.name AS Salesman_Name, CustomerT.cust_name, CustomerT.city
+FROM Salesman AS SalesmanT, Customer AS CustomerT
+WHERE SalesmanT.city = CustomerT.city
+
+2. Prepare a list with order no, purchase amount, customer name and their cities for those orders which order amount between 500 and 2000.
+
+SELECT OrdersT.ord_no AS Order_no,OrdersT.purch_amt AS Purchase_amount ,CustomerT.cust_name AS Customer_name, CustomerT.city As Customer_city
+FROM  Orders AS  OrdersT, Customer AS CustomerT
+WHERE OrdersT.purch_amt BETWEEN 500 AND 2000
+
+3. Write a SQL statement to know which salesman are working for which customer
+
+SELECT SalesmanT.salesman_id AS Salesman_Id, SalesmanT.name AS Salesman_Name, CustomerT.cust_name AS Customer_Name 
+FROM Salesman AS SalesmanT 
+INNER JOIN Customer AS CustomerT
+ON SalesmanT.salesman_id = CustomerT.salesman_id
+
+4. Find the list of customers who appointed a salesman for their jobs who gets a commission from the company is more than 12%
+
+SELECT CustomerT.cust_name AS Customer_Name, SalesmanT.salesman_id AS Salesman_Id, SalesmanT.name AS Salesman_Name, SalesmanT.city AS Salesman_City, FORMAT(SalesmanT.commission,'P0') AS Salesman_Commission
+FROM Salesman AS SalesmanT 
+INNER JOIN Customer AS CustomerT
+ON SalesmanT.salesman_id = CustomerT.salesman_id 
+WHERE SalesmanT.commission > 0.12
+
+
+5. Find the list of customers who appointed a salesman for their jobs who does not live in the same city where their customer lives, and gets a commission is above 12%
+
+ELECT CustomerT.cust_name AS Customer_Name, SalesmanT.salesman_id AS Salesman_Id, SalesmanT.name AS Salesman_Name,CustomerT.city AS Customer_City, SalesmanT.city AS Salesman_City, FORMAT(SalesmanT.commission,'P0') AS Salesman_Commission
+FROM Salesman AS SalesmanT 
+INNER JOIN Customer AS CustomerT
+ON SalesmanT.salesman_id = CustomerT.salesman_id 
+WHERE SalesmanT.city != CustomerT.city 
+AND SalesmanT.commission > 0.12
+
+6. Find the details of a order i.e. order number, order date, amount of order, which customer gives the order and which salesman works for that customer and how much commission he gets for an order.
+
+SELECT OrdersT.ord_no AS Order_no,OrdersT.ord_date AS Order_date, OrdersT.purch_amt AS Purchase_amount,CustomerT.cust_name AS Customer_Name,SalesT.name AS Salesman_Name, FORMAT(SalesT.commission,'P0') AS Salesman_Commission
+FROM  Orders AS  OrdersT
+INNER JOIN Customer AS CustomerT
+ON OrdersT.customer_id = CustomerT.customer_id
+INNER JOIN Salesman AS SalesT
+ON OrdersT.salesman_id = SalesT.salesman_id 
+
+
+7. Make a join on the tables salesman, customer and orders in such a form that the same column of each table will appear once and only the relational rows will come
+
+SELECT * 
+FROM Orders AS OrdersT
+NATURAL JOIN Customer
+NATURAL JOIN Sales
+
+
+
+8. Write a SQL statement to make a report with customer name, city, order no. order date, purchase amount for only those customers on the list who must have a grade and placed one or more orders 
+or which order(s) have been placed by the customer who is neither in the list nor have a grade. */
+
+SELECT CustomerT.cust_name AS Customer_Name,
+       CustomerT.city,
+       OrdersT.ord_no,
+       OrdersT.ord_date,
+       OrdersT.purch_amt
+  FROM Customer AS CustomerT
+  FULL OUTER JOIN Orders AS  OrdersT
+    ON CustomerT.customer_id= OrdersT.customer_id
+      AND CustomerT.grade IS NOT NULL;
+
+9. Write a SQL statement to make a cartesian product between salesman and customer i.e. each salesman will appear for all customer and vice versa
+
+SELECT SalesT.name AS Salesman_Name, CustomerT.cust_name AS 'Customer_Name'
+FROM Salesman AS SalesT
+CROSS JOIN Customer AS CustomerT;
+
+
+
+
+
